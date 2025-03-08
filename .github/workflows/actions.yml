@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '0 5 * * *' # runs every day at 5 am UTC
+    - cron: '50 0 * * *' # '0 5 * * *' # runs every day at 5 am UTC
 
 jobs:
   build:
@@ -10,13 +10,13 @@ jobs:
 
     steps:
       - name: Checkout repo content
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
