@@ -7,6 +7,15 @@ RECURRING_DB_ID = "1aa9514d723c80c3b9abda16a74ec3b3"
 TASKS_DB_ID = "16b9514d723c80d6b81ac1d9d8496218"
 
 
+def is_success_response(name: str, response, ex=None) -> bool:
+    if not response.ok:
+        print(f"Error {name} response with status_code {response.status_code}")
+        raise ex
+    else:
+        print(f"Success {name} response")
+    return response.ok
+
+
 def get_headers(api_key):
     return {
         "Authorization": f"Bearer {api_key}",
@@ -17,15 +26,21 @@ def get_headers(api_key):
 
 def get_recurrent_tasks(headers):
     url = f"https://api.notion.com/v1/databases/{RECURRING_DB_ID}/query"
-    response = requests.post(url, headers=headers)
-    return response.json().get("results", [])
+    res = requests.post(url, headers=headers)
+    if not res.ok:
+        raise Exception(
+            f"Error get_recurrent_tasks with status_code {res.status_code} and content {res.content}")
+    return res.json().get("results", [])
 
 
 def get_reminders(headers):
     # TODO: Add filters in query params to optimize memory filter
     url = f"https://api.notion.com/v1/databases/{TASKS_DB_ID}/query"
-    response = requests.post(url, headers=headers)
-    return response.json().get("results", [])
+    res = requests.post(url, headers=headers)
+    if not res.ok:
+        raise Exception(
+            f"Error get_reminders tasks with status_code {res.status_code} and content {res.content}")
+    return res.json().get("results", [])
 
 
 def create_reminder(headers, name, alert_date):
@@ -39,12 +54,13 @@ def create_reminder(headers, name, alert_date):
         }
     }
     print(f"creating reminder because it doesn't exist with data={data}")
-    response = requests.post(url, headers=headers, json=data)
-    if not response.ok:
-        print(f"Error creating reminder {name} with res {response.content}")
-    else:
-        print(f"Success creating reminder {name}")
-    return response.json()
+    res = requests.post(url, headers=headers, json=data)
+    if not res.ok:
+        raise Exception(
+            f"Error create_reminder task with name {name}, status_code {res.status_code} and content {res.content}")
+
+    print(f"Success creating reminder {name}")
+    return res.json()
 
 
 def already_exist_reminder(reminders, name):
