@@ -54,13 +54,14 @@ def already_exist_reminder(reminders, name):
     )
 
 
-def main_recurrent_tasks(notion_api_key):
+def main_recurrent_tasks(notion_api_key: str):
     headers = get_headers(notion_api_key)
     recurrent_tasks = get_recurrent_tasks(headers)
     existing_reminders = get_reminders(headers)
 
-    existing_reminders = list(filter(lambda r: (not r["properties"]["Hecho?"]["checkbox"]) and
-                                          r["properties"]["⏳ "]["checkbox"], existing_reminders))
+    existing_reminders = list(
+        filter(lambda r: (not r["properties"]["Hecho?"]["checkbox"]) and r["properties"]["⏳ "]["checkbox"],
+               existing_reminders))
 
     today = date.today()
 
