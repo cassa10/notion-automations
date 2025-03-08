@@ -24,4 +24,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run script recurrent_tasks
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python main.py recurrent_tasks
