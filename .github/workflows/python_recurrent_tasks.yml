@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '50 0 * * *' # '0 5 * * *' # runs every day at 5 am UTC
+    - cron: '0 5 * * *' # runs every day at 5 am UTC
 
 jobs:
   build:
@@ -28,5 +28,5 @@ jobs:
 
       - name: Run script recurrent_tasks
         env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_SEC: ${{ secrets.NOTION_TOKEN }}
         run: python main.py recurrent_tasks

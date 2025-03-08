@@ -17,7 +17,10 @@ SCRIPTS_DICT: Dict[str, Callable[[str], None]] = {
 
 
 def callScript(script_key: str):
-    notion_api_key = os.environ[NOTION_SECRET]
+    try:
+        notion_api_key = os.environ[NOTION_SECRET]
+    except Exception:
+        raise Exception(f"error getting notion secret with env var name '{NOTION_SECRET}'")
     SCRIPTS_DICT[script_key](notion_api_key)
 
 
