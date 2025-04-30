@@ -43,13 +43,14 @@ def get_reminders(headers):
     return res.json().get("results", [])
 
 
-def create_reminder(headers, name, alert_date):
+def create_reminder(headers, name, alert_date, notes):
     url = "https://api.notion.com/v1/pages"
     data = {
         "parent": {"database_id": TASKS_DB_ID},
         "properties": {
             "Siguiente acción": {"title": [{"text": {"content": name}}]},
             "Día alerta": {"date": {"start": alert_date.isoformat()}},
+            "Notas": {"rich_text": [{"text": {"content": notes}}]},
             "⏳ ": {"type": "checkbox", "checkbox": True}
         }
     }
@@ -85,10 +86,11 @@ def main_recurrent_tasks(notion_api_key: str):
         name = task["properties"]["Name"]["title"][0]["text"]["content"].strip()
         days = task["properties"]["Dias de recurrencia"]["number"]
         status = task["properties"]["Estado"]["select"]["name"]
+        notes = task["properties"]["Notas"]["rich_text"][0]["text"]["content"]
         if status != "Activo":
             continue
         alert_date = today + timedelta(days=days)
         alert_date = datetime.combine(alert_date, time(13, 0, 0))
         # Check if reminder already exists
         if not already_exist_reminder(existing_reminders, name):
-            create_reminder(headers, name, alert_date)
+            create_reminder(headers, name, alert_date, notes)

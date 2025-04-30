@@ -14,7 +14,7 @@ Notion automations repo
   2. Get all current tasks with "wait" checked.
   3. Filter recurrent tasks that are not "Done" checked in the tasks database with "wait" checked.
   4. Calculates the next due date with recurrent next days field from now
-  5. Create task in tasks database with "Wait" check if not exist in curren tasks with same title. 
+  5. Create task in tasks database with "Wait" check if not exist in current tasks with same title.
 - ...
 
 ## Execution
