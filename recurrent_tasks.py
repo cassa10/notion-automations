@@ -86,7 +86,8 @@ def main_recurrent_tasks(notion_api_key: str):
         name = task["properties"]["Name"]["title"][0]["text"]["content"].strip()
         days = task["properties"]["Dias de recurrencia"]["number"]
         status = task["properties"]["Estado"]["select"]["name"]
-        notes = task["properties"]["Notas"]["rich_text"][0]["text"]["content"]
+        notes_raw = task["properties"]["Notas"]["rich_text"]
+        notes = notes_raw[0]["text"]["content"] if len(notes_raw) > 0 else ""
         if status != "Activo":
             continue
         alert_date = today + timedelta(days=days)
